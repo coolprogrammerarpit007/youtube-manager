@@ -1,17 +1,83 @@
-def list_all_videos(videos):
-    pass
+import json
+import sys
 
-def add_video(video):
-    pass
+
+# method to display all videos
+
+def display_favourite_videos(videos):
+    print("********************************")
+    print("Displaying all the your favourite videos.")
+    list_all_videos(videos)
+    print("**********************************")
+    print()
+    print()
+
+def save_video_helper(videos):
+    with open("youtube.txt","w") as file:
+        json.dump(videos,file)  # write the data into file
+
+def load_data():
+    try:
+        with open("youtube.txt","r") as file:
+            return json.load(file)  # will automatically fetches data from from file and converts into json
+
+    except FileNotFoundError:
+        return []
+    except FileExistsError:
+        print("No Data in File: ")
+        return []
+    except Exception:
+        print("Exception captured!")
+        return []
+    
+def list_all_videos(videos):
+    if not videos:
+        print("No Videos Found!")
+        return
+    for index,video in enumerate(videos,start=1):
+        print(f"Video Number {index} : {video}")
+
+def add_video(videos):
+    video_name = input("Enter Video Name: ")
+    time = input("Enter Video Time: ")
+    videos.append({
+        "name":video_name,
+        "time":time
+    })
+    save_video_helper(videos)
 
 def update_video(videos):
-    pass
+    display_favourite_videos(videos)
+    video_number = int(input("Enter Video Number which you want to update: "))
+    video_number = video_number - 1
+    if 0 <= video_number < len(videos):
+        video_name = input("Enter New Video Name: ")
+        time = input("Enter New Video Time: ")
+        videos[video_number] = {
+            "name":video_name,
+            "time":time
+        }
+        save_video_helper(videos)
+    else:
+        print("Video Not Found!")
 
 def delete_video(videos):
-    pass
+    display_favourite_videos(videos)
+    ans = input("Are you sure you want to delete a video. (y/n) ").lower()
+    if ans == "y":
+        video_number = int(input("Enter video number you wanted to deleted: "))
+        video_number = video_number - 1
+        if 0 <= video_number < len(videos):
+            videos.pop(video_number)
+            print("Your video has been deleted sucessfully! ")
+        else:
+            print("Video does not exist! ")
+    else:
+        return 
 
 def main():
-    videos = []
+    # Load data from file
+    videos = load_data()
     while True:
         print("\n Youtube Manager | choose your choice ")
         print("1. List all favourite videos ")
@@ -29,7 +95,7 @@ def main():
 
             case "2":
                 print("\n youtube video has been added sucessfully. ")
-                add_video(video)
+                add_video(videos)
 
             case "3":
                 print("\n Updated youtube video Details ")
@@ -46,3 +112,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+    # enumerate helps in addng indexes to the Itterables.
