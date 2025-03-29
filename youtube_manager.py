@@ -35,7 +35,7 @@ def list_all_videos(videos):
         print("No Videos Found!")
         return
     for index,video in enumerate(videos,start=1):
-        print(f"Video Number {index} : {video}")
+        print(f"Video Number {index} : Video Name: {video["name"]} : Video Time: {video["time"]}")
 
 def add_video(videos):
     video_name = input("Enter Video Name: ")
